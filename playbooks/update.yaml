@@ -1,0 +1,16 @@
+---
+- name: Check if there are packages to upgrade.
+  hosts: all
+  serial: 1
+  roles:
+    - { role: os-packages, update: true }
+
+  tasks:
+    - name: Show list of packages to upgrade.
+      debug:
+        msg: "{{ packages_to_upgrade }}"
+      when: has_packages_to_upgrade
+    - name: Information
+      debug:
+        msg: "There are no packages to upgrade."
+      when: not has_packages_to_upgrade

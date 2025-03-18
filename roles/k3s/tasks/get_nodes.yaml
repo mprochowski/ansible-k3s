@@ -1,0 +1,4 @@
+---
+- name: Get k3s node.
+  ansible.builtin.shell:
+    cmd: "kubectl get nodes"

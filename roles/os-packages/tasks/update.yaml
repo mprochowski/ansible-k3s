@@ -1,0 +1,25 @@
+---
+- name: Perform a `apt update`.
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Generate list of packages to upgrade.
+  become: yes
+  ansible.builtin.shell:
+    cmd: "apt list --upgradable 2>/dev/null | awk -F'/' 'NR>1 {print $1}'"
+  register: packages_to_upgrade_all
+
+- name: Generate list of `phased-update` packages to upgrade.
+  become: yes
+  ansible.builtin.shell:
+    cmd: "apt list --upgradable 2>/dev/null | awk -F'/' 'NR>1 {print $1}' | xargs -I{} sh -c \"apt-cache policy {} | grep -q 'phased [0-9]+%' || echo {}\""
+  register: packages_to_upgrade_phased
+
+- name: Creating fact `packages_to_upgrade` based on list of packages to upgrade.
+  ansible.builtin.set_fact:
+    packages_to_upgrade: "{{ packages_to_upgrade_all.stdout_lines | difference(packages_to_upgrade_phased.stdout_lines) }}"
+
+- name: Creating facts  `has_packages_to_upgrade` based on list of packages to upgrade.
+  ansible.builtin.set_fact:
+    has_packages_to_upgrade: "{% if (packages_to_upgrade | length > 0) %}true{% else %}false{% endif %}"

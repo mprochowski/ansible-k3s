@@ -1,0 +1,4 @@
+---
+- name: Cordon k3s node.
+  ansible.builtin.shell:
+    cmd: "kubectl cordon {{ ansible_hostname }}"

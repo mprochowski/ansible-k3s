@@ -1,0 +1,18 @@
+---
+- name: Upgrade nodes.
+  hosts: all
+  serial: 1
+  roles:
+    - { role: os-packages, update: true }
+    - { role: k3s, cordon: true, when: has_packages_to_upgrade }
+    - { role: k3s, drain: true, when: has_packages_to_upgrade }
+    - { role: os-packages, upgrade: true, when: has_packages_to_upgrade }
+    - { role: os, check_and_reboot: true, when: has_packages_to_upgrade }
+    - { role: os-packages, cleanup: true, when: has_packages_to_upgrade }
+    - { role: k3s, uncordon: true, when: has_packages_to_upgrade }
+
+  tasks:
+    - name: Information
+      debug:
+        msg: "There are no packages to upgrade."
+      when: not has_packages_to_upgrade

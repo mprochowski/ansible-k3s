@@ -1,0 +1,4 @@
+---
+- name: Uncordon k3s node.
+  ansible.builtin.shell:
+    cmd: "kubectl uncordon {{ ansible_hostname }}"

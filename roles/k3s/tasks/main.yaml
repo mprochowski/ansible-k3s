@@ -1,0 +1,20 @@
+---
+- name: Get k3s nodes.
+  delegate_to: localhost
+  import_tasks: get_nodes.yaml
+  when: get_nodes | default(false)
+
+- name: Cordon k3s node.
+  delegate_to: localhost
+  import_tasks: cordon.yaml
+  when: cordon | default(false)
+
+- name: Uncordon k3s node.
+  delegate_to: localhost
+  import_tasks: uncordon.yaml
+  when: uncordon | default(false)
+
+- name: Drain k3s node.
+  delegate_to: localhost
+  import_tasks: drain.yaml
+  when: drain | default(false)

@@ -1,0 +1,4 @@
+---
+- name: Drain k3s node.
+  ansible.builtin.shell:
+    cmd: "kubectl drain {{ ansible_hostname }} --ignore-daemonsets --delete-emptydir-data"

@@ -1,0 +1,12 @@
+---
+- name: Check and reboot if is required.
+  import_tasks: check_and_reboot.yaml
+  when: check_and_reboot | default(false)
+
+- name: Check if a reboot is required.
+  import_tasks: check_if_reboot_is_required.yaml
+  when: check_if_reboot_is_required | default(false)
+
+- name: Reboot.
+  import_tasks: reboot.yaml
+  when: reboot | default(false)

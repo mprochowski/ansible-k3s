@@ -1,0 +1,5 @@
+---
+- import_tasks: check_if_reboot_is_required.yaml
+
+- import_tasks: reboot.yaml
+  when: reboot_required

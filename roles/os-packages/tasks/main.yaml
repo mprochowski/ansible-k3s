@@ -1,0 +1,12 @@
+---
+- name: Run `apt` update.
+  import_tasks: update.yaml
+  when: update | default(false)
+
+- name: Perform a upgrade.
+  import_tasks: upgrade.yaml
+  when: upgrade | default(false)
+
+- name: Remove dependencies that are no longer required.
+  import_tasks: cleanup.yaml
+  when: cleanup | default(false)
